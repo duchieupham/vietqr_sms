@@ -11,6 +11,10 @@ enum BlocStatus { NONE, LOADING, UNLOADING }
 
 enum LoginType { NONE, SUCCESS, TOAST, ERROR, CHECK_EXIST, REGISTER }
 
+enum DashBoardType { NONE, TOKEN, ERROR }
+
+enum TokenType { NONE, Expired, MainSystem, LogOut, LogOut_Failed }
+
 enum CheckType { C01, C02, C03, C04 }
 
 enum TypeOTP { SUCCESS, FAILED, ERROR, AWAIT, NONE }

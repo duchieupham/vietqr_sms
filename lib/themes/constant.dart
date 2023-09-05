@@ -13,6 +13,7 @@ class Constant {
   static const String RESPONSE_STATUS_SUCCESS = 'SUCCESS';
   static const String RESPONSE_STATUS_FAILED = 'FAILED';
   static const String RESPONSE_STATUS_CHECK = 'CHECK';
+  static const String RESPONSE_STATUS_TOKEN_EXPIRED = 'TOKEN_EXPIRED';
 
   //animation
   static const SUCCESS_ANI_INITIAL_STATE = 'initial';

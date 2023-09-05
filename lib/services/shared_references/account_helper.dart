@@ -13,8 +13,12 @@ class AccountHelper {
   static AccountHelper get instance => _instance;
 
   Future<void> initialAccountHelper() async {
+    AccountInformationDTO dto = const AccountInformationDTO(
+        smsId: '', phoneNo: '', fullName: '', email: '', imgId: '');
     await sharedPrefs.setString('TOKEN', '');
     await sharedPrefs.setString('FCM_TOKEN', '');
+    await sharedPrefs.setString(
+        'ACCOUNT_INFORMATION', dto.toSPJson().toString());
   }
 
   Future<void> setToken(String value) async {

@@ -174,14 +174,8 @@ class _LoginState extends State<_Login> {
               }
 
               if (!mounted) return;
-              final data = await Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => Register(phoneNo: state.phone ?? ''),
-                  settings: const RouteSettings(
-                    name: Routes.REGISTER,
-                  ),
-                ),
-              );
+              final data = await Utils.navigatePage(
+                  context, Register(phoneNo: state.phone ?? ''));
 
               if (data is Map) {
                 AccountLoginDTO dto = AccountLoginDTO(

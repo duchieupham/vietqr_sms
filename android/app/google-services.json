@@ -1,0 +1,83 @@
+{
+  "project_info": {
+    "project_number": "723381873229",
+    "firebase_url": "https://bns-stagging-default-rtdb.firebaseio.com",
+    "project_id": "bns-stagging",
+    "storage_bucket": "bns-stagging.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:723381873229:android:ee4663c88ed79162fbca04",
+        "android_client_info": {
+          "package_name": "com.bns.stagging"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "723381873229-r3eopvst6m9qb2rqoehjr0lbd9r496ne.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCQDXNyuh5f-bms8PI1610wow6Emyoh8P0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "723381873229-r3eopvst6m9qb2rqoehjr0lbd9r496ne.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "723381873229-ls11tqmjdo6ifl647u8uvk6qkel1per5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.bns.stagging"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:723381873229:android:f529e42527d0c813fbca04",
+        "android_client_info": {
+          "package_name": "com.example.vietqr_sms"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "723381873229-r3eopvst6m9qb2rqoehjr0lbd9r496ne.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCQDXNyuh5f-bms8PI1610wow6Emyoh8P0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "723381873229-r3eopvst6m9qb2rqoehjr0lbd9r496ne.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "723381873229-ls11tqmjdo6ifl647u8uvk6qkel1per5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.bns.stagging"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

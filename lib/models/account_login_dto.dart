@@ -22,7 +22,7 @@ class AccountLoginDTO {
     Map<String, dynamic> data = {};
     data['phoneNo'] = phoneNo;
     data['password'] = password;
-    if (fullName != null) data['fullname'] = fullName;
+    if (fullName != null) data['fullName'] = fullName;
     if (fcmToken != null) data['fcmToken'] = fcmToken;
     if (email != null) data['email'] = email;
     if (device != null) data['device'] = device;

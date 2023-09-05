@@ -4,6 +4,7 @@ class RegisterProvider with ChangeNotifier {
   //error handler
   bool _isPhoneErr = false;
   bool _isPasswordErr = false;
+
   bool _isConfirmPassErr = false;
 
   final phoneNoController = TextEditingController();
@@ -13,6 +14,10 @@ class RegisterProvider with ChangeNotifier {
   final confirmPassController = TextEditingController();
 
   final introduceController = TextEditingController();
+
+  final emailController = TextEditingController();
+
+  final nameController = TextEditingController();
 
   get phoneErr => _isPhoneErr;
 
@@ -32,16 +37,9 @@ class RegisterProvider with ChangeNotifier {
 
   static const String countryCode = '+84';
 
-  double height = 0;
-  bool isShowButton = false;
+  int _page = 0;
 
-  void updateHeight(value, showBT) {
-    if (height == 0) {
-      height = value;
-    }
-    isShowButton = showBT;
-    notifyListeners();
-  }
+  int get page => _page;
 
   void updateVerifyId(value) {
     _verificationId = value;
@@ -75,6 +73,17 @@ class RegisterProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void updateConfirmPassword(String value) {
+    if (value == passwordController.text) {
+      confirmPassController.value =
+          confirmPassController.value.copyWith(text: value);
+      _isConfirmPassErr = false;
+    } else {
+      _isConfirmPassErr = true;
+    }
+    notifyListeners();
+  }
+
   void updateErrs({
     required bool phoneErr,
     required bool passErr,
@@ -96,8 +105,11 @@ class RegisterProvider with ChangeNotifier {
 
   bool isEnableButton() {
     if (phoneNoController.text.isNotEmpty &&
-        passwordController.text.isNotEmpty) {
-      return true;
+        passwordController.text.isNotEmpty &&
+        confirmPassController.text.isNotEmpty) {
+      if (isValidValidation()) {
+        return true;
+      }
     }
     return false;
   }
@@ -109,63 +121,27 @@ class RegisterProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void updateRePass(String value) {
-    if (value.isNotEmpty) {
-      confirmPassController.value =
-          confirmPassController.value.copyWith(text: value);
-      if (value != passwordController.text) {
-        _isConfirmPassErr = true;
-      } else {
-        _isConfirmPassErr = false;
-      }
-    } else {
-      _isConfirmPassErr = true;
-    }
-
-    notifyListeners();
-  }
-
   void updateIntroduce(String value) {
     introduceController.value = introduceController.value.copyWith(text: value);
     notifyListeners();
   }
 
-// Future<void> phoneAuthentication(String phone,
-//     {Function(TypeOTP)? onSentOtp}) async {
-//   await auth.verifyPhoneNumber(
-//     phoneNumber: countryCode + phone,
-//     verificationCompleted: (PhoneAuthCredential credential) async {},
-//     codeSent: (String verificationId, int? resendToken) {
-//       updateVerifyId(verificationId);
-//       updateResendToken(resendToken);
-//       if (onSentOtp != null) {
-//         onSentOtp(TypeOTP.SUCCESS);
-//       }
-//     },
-//     codeAutoRetrievalTimeout: (String verificationId) {},
-//     verificationFailed: (FirebaseAuthException e) {
-//       if (onSentOtp != null) {
-//         onSentOtp(TypeOTP.FAILED);
-//       }
-//     },
-//     forceResendingToken: _resendToken,
-//     timeout: const Duration(seconds: 120),
-//   );
-// }
-//
-// Future<dynamic> verifyOTP(String otp, Function onLoading) async {
-//   try {
-//     onLoading();
-//     var credentials = await auth.signInWithCredential(
-//         PhoneAuthProvider.credential(
-//             verificationId: verificationId, smsCode: otp));
-//     updateResendToken(null);
-//     return credentials.user != null;
-//   } on FirebaseAuthException catch (e) {
-//     if (e.code == 'session-expired') {
-//       updateResendToken(null);
-//     }
-//     return e.code;
-//   }
-// }
+  updatePage(int page) {
+    _page = page;
+    notifyListeners();
+  }
+
+  void updateEmail(String value) {
+    if (value.isNotEmpty) {
+      emailController.value = emailController.value.copyWith(text: value);
+    } else {}
+    notifyListeners();
+  }
+
+  void updateName(String value) {
+    if (value.isNotEmpty) {
+      nameController.value = nameController.value.copyWith(text: value);
+    } else {}
+    notifyListeners();
+  }
 }

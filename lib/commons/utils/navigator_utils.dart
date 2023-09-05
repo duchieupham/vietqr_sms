@@ -25,9 +25,7 @@ class NavigatorUtils {
     ));
   }
 
-  static void navigateToRoot(
-    BuildContext context,
-  ) {
+  static void navigateToRoot(BuildContext context) {
     return Navigator.of(context).popUntil((route) => route.isFirst);
   }
 
