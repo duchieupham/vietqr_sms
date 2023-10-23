@@ -17,8 +17,17 @@ class AccountHelper {
         smsId: '', phoneNo: '', fullName: '', email: '', imgId: '');
     await sharedPrefs.setString('TOKEN', '');
     await sharedPrefs.setString('FCM_TOKEN', '');
+    await sharedPrefs.setString('USER_ID', '');
     await sharedPrefs.setString(
         'ACCOUNT_INFORMATION', dto.toSPJson().toString());
+  }
+
+  Future<void> setUserId(String userId) async {
+    await sharedPrefs.setString('USER_ID', userId);
+  }
+
+  String getUserId() {
+    return sharedPrefs.getString('USER_ID')!;
   }
 
   Future<void> setToken(String value) async {

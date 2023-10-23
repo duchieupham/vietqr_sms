@@ -11,8 +11,6 @@ class UserRepository {
 
   Box get _box => SharedPrefs.instance.prefs!;
 
-  final String _bankKey = 'bank_key';
-
   List<BankModel> listBank = [];
 
   List<BankModel> getBanks() {

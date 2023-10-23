@@ -1,16 +1,26 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:telephony/telephony.dart';
 import 'package:vietqr_sms/commons/enum/enum.dart';
 import 'package:vietqr_sms/commons/enum/enum_bank.dart';
 import 'package:vietqr_sms/commons/layouts/m_app_bar.dart';
+import 'package:vietqr_sms/commons/utils/bank_utils.dart';
 import 'package:vietqr_sms/commons/utils/navigator_utils.dart';
+import 'package:vietqr_sms/mixin/even_bus.dart';
 import 'package:vietqr_sms/models/bank_model.dart';
+import 'package:vietqr_sms/models/transaction_model.dart';
 import 'package:vietqr_sms/models/user_responsion.dart';
 import 'package:vietqr_sms/screens/dashboard/blocs/dashboard_bloc.dart';
 import 'package:vietqr_sms/screens/dashboard/events/dashboard_event.dart';
+import 'package:vietqr_sms/screens/dashboard/sms_listener.dart';
 import 'package:vietqr_sms/screens/dashboard/states/dashboard_state.dart';
 import 'package:vietqr_sms/screens/detail_sms/detail_sms_screen.dart';
 import 'package:vietqr_sms/screens/login/login_screen.dart';
+import 'package:vietqr_sms/services/local_storage/local_storage.dart';
+import 'package:vietqr_sms/services/shared_references/account_helper.dart';
 
 class DashBoardScreen extends StatefulWidget {
   const DashBoardScreen({super.key});
@@ -23,7 +33,11 @@ class _DashBoardScreenState extends State<DashBoardScreen>
     with WidgetsBindingObserver, AutomaticKeepAliveClientMixin {
   late DashBoardBloc _bloc;
 
+  LocalStorageRepository local = LocalStorageRepository();
+
   UserRepository get userRes => UserRepository.instance;
+
+  Telephony telephony = Telephony.instance;
 
   @override
   void initState() {
@@ -33,20 +47,51 @@ class _DashBoardScreenState extends State<DashBoardScreen>
     WidgetsBinding.instance.addPostFrameCallback((_) {
       initData();
     });
-  }
 
-  List<BankModel> list = [
-    BankModel(id: '0', bankSortName: 'VietinBank', bankAccount: '101869255506'),
-    BankModel(id: '1', bankSortName: 'MB', bankAccount: '101869255506'),
-    BankModel(id: '2', bankSortName: 'SHB', bankAccount: '101869255506'),
-    BankModel(id: '3', bankSortName: 'BIDV', bankAccount: '101869255506'),
-    BankModel(id: '4', bankSortName: 'VietinBank', bankAccount: '101869255506'),
-    BankModel(id: '5', bankSortName: 'BAOVIET', bankAccount: '101869255506'),
-    BankModel(id: '6', bankSortName: 'VietinBank', bankAccount: '101869255506'),
-    BankModel(id: '7', bankSortName: 'BAOVIET', bankAccount: '101869255506'),
-    BankModel(id: '8', bankSortName: 'SHB', bankAccount: '101869255506'),
-    BankModel(id: '9', bankSortName: 'VietinBank', bankAccount: '101869255506'),
-  ];
+    if (!Platform.isAndroid) {
+      return;
+    }
+
+    telephony.listenIncomingSms(
+      onNewMessage: (SmsMessage message) async {
+        TransactionModel data = TransactionModel();
+
+        if (message.address?.toUpperCase() ==
+            BankType.Vietinbank.name.toUpperCase()) {
+          data = BankUtils.formatVietinBank(message.body ?? '');
+        } else if (message.address?.toUpperCase() ==
+            BankType.MBBank.name.toUpperCase()) {
+          data = BankUtils.formatMBBank(message.body ?? '');
+        } else if (message.address?.toUpperCase() ==
+            BankType.Vietcombank.name.toUpperCase()) {
+          data = BankUtils.formatVietComBank(message.body ?? '');
+        } else if (message.address?.toUpperCase() ==
+            BankType.BIDV.name.toUpperCase()) {
+          data = BankUtils.formatBIDV(message.body ?? '');
+        } else if (message.address?.toUpperCase() ==
+                BankType.BaoVietBank.name.toUpperCase() ||
+            message.address?.toUpperCase() == 'BAOVIET') {
+          data = BankUtils.formatBaoVietBank(message.body ?? '');
+        }
+
+        BankModel bankModel = BankModel(
+          id: '${AccountHelper.instance.getUserId()}${data.bankSortName}',
+          bankSortName: data.bankSortName,
+        );
+
+        await userRes.addBankToBanks(bankModel);
+
+        listBank = userRes.getBanks();
+        setState(() {});
+
+        Box box = await local.openBox(bankModel.bankSortName ?? '');
+        await local.addProductToWishlist(box, data);
+        eventBus.fire(ReloadListTrans());
+      },
+      listenInBackground: true,
+      onBackgroundMessage: backgrounMessageHandler,
+    );
+  }
 
   int index = 0;
 
@@ -55,13 +100,6 @@ class _DashBoardScreenState extends State<DashBoardScreen>
   void initData() {
     _bloc.add(ValidTokenEvent());
     listBank = userRes.getBanks();
-    if (userRes.listBank.isEmpty) {
-      for (var e in list) {
-        userRes.addBankToBanks(e);
-      }
-      userRes.getBanks();
-    }
-    index += 1;
     setState(() {});
   }
 
@@ -123,6 +161,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
   Widget _buildItem(BankModel model) {
     return GestureDetector(
       onTap: () {
+        // NavigatorUtils.navigatePage(context, const SMSListenerScreen());
         NavigatorUtils.navigatePage(context, SMSDetailScreen(bankModel: model));
       },
       child: Container(
@@ -161,16 +200,16 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                             ),
                           ),
                         ),
-                        Text(
-                          '${model.transTime?.hour}:${model.transTime?.minute}',
-                          style: const TextStyle(
-                            color: Colors.grey,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500,
-                            height: 1.4,
-                          ),
-                        ),
-                        const SizedBox(width: 4),
+                        // Text(
+                        //   '${model.transTime?.hour}:${model.transTime?.minute}',
+                        //   style: const TextStyle(
+                        //     color: Colors.grey,
+                        //     fontSize: 15,
+                        //     fontWeight: FontWeight.w500,
+                        //     height: 1.4,
+                        //   ),
+                        // ),
+                        // const SizedBox(width: 4),
                         const Icon(
                           Icons.keyboard_arrow_right,
                           color: Colors.grey,

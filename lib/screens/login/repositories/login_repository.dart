@@ -64,6 +64,7 @@ class LoginRepository {
         await AccountHelper.instance.setToken(token);
         await AccountHelper.instance
             .setAccountInformation(accountInformationDTO);
+        await AccountHelper.instance.setUserId(accountInformationDTO.smsId);
         result = true;
       }
     } catch (e) {

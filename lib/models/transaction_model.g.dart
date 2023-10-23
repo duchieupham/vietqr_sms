@@ -20,17 +20,21 @@ class TransactionModelAdapter extends TypeAdapter<TransactionModel> {
       id: fields[0] as String?,
       bankSortName: fields[1] as String?,
       bankAccount: fields[2] as String?,
-      transTime: fields[3] as DateTime?,
+      transTime: fields[3] as String?,
       transMoney: fields[4] as String?,
-      transType: fields[5] as String?,
-      transferContent: fields[6] as String?,
+      oldMoney: fields[5] as String?,
+      transType: fields[6] as String?,
+      transferContent: fields[7] as String?,
+      firstContent: fields[8] as String?,
+      status: fields[9] as String?,
+      hotline: fields[10] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, TransactionModel obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(11)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -42,9 +46,17 @@ class TransactionModelAdapter extends TypeAdapter<TransactionModel> {
       ..writeByte(4)
       ..write(obj.transMoney)
       ..writeByte(5)
-      ..write(obj.transType)
+      ..write(obj.oldMoney)
       ..writeByte(6)
-      ..write(obj.transferContent);
+      ..write(obj.transType)
+      ..writeByte(7)
+      ..write(obj.transferContent)
+      ..writeByte(8)
+      ..write(obj.firstContent)
+      ..writeByte(9)
+      ..write(obj.status)
+      ..writeByte(10)
+      ..write(obj.hotline);
   }
 
   @override

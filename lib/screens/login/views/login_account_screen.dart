@@ -70,7 +70,7 @@ class LoginAccountScreen extends StatelessWidget {
                       decoration: const BoxDecoration(
                         image: DecorationImage(
                           image: AssetImage(
-                              'assets/images/logo_vietgr_payment.png'),
+                              'assets/images/logo_vietqr_payment.png'),
                           fit: BoxFit.contain,
                         ),
                       ),

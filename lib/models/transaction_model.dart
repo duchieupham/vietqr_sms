@@ -1,5 +1,4 @@
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:vietqr_sms/commons/enum/enum_bank.dart';
 
 part 'transaction_model.g.dart';
 
@@ -12,13 +11,21 @@ class TransactionModel extends HiveObject {
   @HiveField(2)
   String? bankAccount;
   @HiveField(3)
-  DateTime? transTime;
+  String? transTime;
   @HiveField(4)
   String? transMoney;
   @HiveField(5)
-  String? transType;
+  String? oldMoney;
   @HiveField(6)
+  String? transType;
+  @HiveField(7)
   String? transferContent;
+  @HiveField(8)
+  String? firstContent;
+  @HiveField(9)
+  String? status;
+  @HiveField(10)
+  String? hotline;
 
   TransactionModel({
     this.id,
@@ -26,9 +33,27 @@ class TransactionModel extends HiveObject {
     this.bankAccount,
     this.transTime,
     this.transMoney,
+    this.oldMoney,
     this.transType,
     this.transferContent,
+    this.firstContent,
+    this.status,
+    this.hotline,
   });
+
+  dynamic get getHotline {
+    if (hotline != null) {
+      if (hotline!.isNotEmpty) {
+        if (hotline!.contains('/')) {
+          List<String> values = hotline!.split('/');
+          return values;
+        } else {
+          return hotline;
+        }
+      }
+    }
+    return '';
+  }
 
   factory TransactionModel.fromJson(Map<String, dynamic> json) =>
       TransactionModel(
@@ -37,7 +62,11 @@ class TransactionModel extends HiveObject {
         bankAccount: json["bankAccount"],
         transTime: json["transTime"],
         transMoney: json["transMoney"],
+        oldMoney: json["oldMoney"],
         transType: json["transType"],
         transferContent: json["transferContent"],
+        firstContent: json["firstContent"],
+        status: json["status"],
+        hotline: json["hotline"],
       );
 }

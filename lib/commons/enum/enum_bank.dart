@@ -2,6 +2,8 @@
 
 enum TransType { D, C, N }
 
+enum StatusType { BDSD, OTP, CARD, HOTLINE, NONE }
+
 enum BankType {
   Techcombank,
   ACB,

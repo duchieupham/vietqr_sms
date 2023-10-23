@@ -1,7 +1,5 @@
 import 'package:hive/hive.dart';
 
-import 'package:vietqr_sms/commons/enum/enum_bank.dart';
-
 part 'bank_model.g.dart';
 
 @HiveType(typeId: 0)
